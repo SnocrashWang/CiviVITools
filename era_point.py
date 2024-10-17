@@ -8,7 +8,7 @@ BUTTON_INFO = [
     {"type": "settlement", "text": "异大陆建城", "score": 2, "limit": 2},
     {"type": "settlement", "text": "自然奇观建城", "score": 2, "limit": 2},
     {"type": "settlement", "text": "文明附近建城", "score": 1, "limit": 2},
-    {"type": "settlement", "text": "多3城市", "score": 3, "limit": 3},
+    {"type": "settlement", "text": "多3城市", "score": 3, "limit": 1},
     {"type": "district", "text": "+3学院", "score": 3, "limit": 1},
     {"type": "district", "text": "+3圣地", "score": 3, "limit": 1},
     {"type": "district", "text": "+3剧院", "score": 3, "limit": 1},
@@ -33,7 +33,7 @@ BUTTON_INFO = [
     {"type": "religion", "text": "创立宗教", "score": 2, "limit": 1},
     {"type": "religion", "text": "圆满宗教", "score": 3, "limit": 1},
     {"type": "religion", "text": "宗教审讯", "score": 1, "limit": 1},
-    {"type": "religion", "text": "宗教战争皈依", "score": 3, "limit": 3},
+    {"type": "religion", "text": "敌方城市皈依", "score": 3, "limit": 3},
     {"type": "religion", "text": "圣城皈依", "score": 4, "limit": 2},
     {"type": "diplomacy", "text": "城邦首个宗主", "score": 2, "limit": 3},
     {"type": "diplomacy", "text": "战争时推翻宗主", "score": 2, "limit": 3},
@@ -44,7 +44,7 @@ BUTTON_INFO = [
     {"type": "military", "text": "特色单位", "score": 4, "limit": 1},
     {"type": "military", "text": "建立军队/舰队", "score": 1, "limit": 4},
     {"type": "military", "text": "单位四级升级", "score": 1, "limit": 3},
-    {"type": "military", "text": "城市解放", "score": 2, "limit": 3},
+    {"type": "military", "text": "大将军杀敌", "score": 2, "limit": 3},
     {"type": "military", "text": "占领首都", "score": 4, "limit": 2},
     {"type": "military", "text": "消灭文明", "score": 5, "limit": 2},
 ]
@@ -93,7 +93,7 @@ class CalculatorApp:
             self.button_states[idx] = {'button': None, 'score': score, 'limit': limit, 'count': 0}
             
             # 创建按钮，显示text，点击后切换状态
-            button = tk.Button(self.button_frames[button_type], text=f"{text} (0)", font=(font, 10), width=15, 
+            button = tk.Button(self.button_frames[button_type], text=f"{text} (0)", font=(font, 10), width=20, 
                                command=lambda i=idx, t=text, l=limit: self.toggle_value(i, t, l), bg=red)
             button.pack(side="left", padx=10)
             
