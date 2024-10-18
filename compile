@@ -1,1 +1,0 @@
-pyinstaller --onefile .\era_point.py --noconsole --icon=icon.ico

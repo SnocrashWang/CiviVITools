@@ -1,5 +1,7 @@
-__pycache__
-build/*
-dist/*
 .*
 !.gitignore
+__pycache__
+.idea
+build/*
+dist/*
+*.spec

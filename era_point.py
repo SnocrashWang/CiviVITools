@@ -1,8 +1,7 @@
 import tkinter as tk
-import json
 
 
-BUTTON_INFO = [
+ERA_POINT_INFO = [
     {"type": "settlement", "text": "城市人口", "score": 1, "limit": 4},
     {"type": "settlement", "text": "烂地建城", "score": 1, "limit": 5},
     {"type": "settlement", "text": "异大陆建城", "score": 2, "limit": 2},
@@ -49,29 +48,26 @@ BUTTON_INFO = [
     {"type": "military", "text": "消灭文明", "score": 5, "limit": 2},
 ]
 
-red = "#FF3333"
-green = "#99FF33"
-font = "Consolas"
+RED = "#FF3333"
+GREEN = "#99FF33"
+FONT = "Consolas"
 
 
-class CalculatorApp:
+class EraPointApp:
     def __init__(self, root, button_info):
         self.total = 0
         self.button_states = {}  # 保存每个按钮的状态
-        
-        # 设置窗口标题
-        root.title("时代分计算器")
         
         # 创建显示框架
         display_frame = tk.Frame(root)
         display_frame.pack(pady=20)
         
         # 创建总和显示框
-        self.display = tk.Label(display_frame, text="时代分:  0/31", font=(font, 15))
+        self.display = tk.Label(display_frame, text="时代分:  0/31", font=(FONT, 15))
         self.display.pack(side="left", padx=10)
         
         # 添加重置按钮到总和显示旁边
-        reset_button = tk.Button(display_frame, text="重置", font=(font, 10), command=self.reset)
+        reset_button = tk.Button(display_frame, text="重置", font=(FONT, 10), command=self.reset)
         reset_button.pack(side="left", padx=10)
         
         # 按钮框架（按类型分行显示按钮）
@@ -93,8 +89,8 @@ class CalculatorApp:
             self.button_states[idx] = {'button': None, 'score': score, 'limit': limit, 'count': 0}
             
             # 创建按钮，显示text，点击后切换状态
-            button = tk.Button(self.button_frames[button_type], text=f"{text} (0)", font=(font, 10), width=20, 
-                               command=lambda i=idx, t=text, l=limit: self.toggle_value(i, t, l), bg=red)
+            button = tk.Button(self.button_frames[button_type], text=f"{text} (0)", font=(FONT, 10), width=20, 
+                               command=lambda i=idx, t=text, l=limit: self.toggle_value(i, t, l), bg=RED)
             button.pack(side="left", padx=10)
             
             # 保存按钮控件
@@ -108,12 +104,12 @@ class CalculatorApp:
         if count < limit:
             # 如果按钮是关闭的，打开并增加值
             self.total += score
-            self.button_states[idx]['button'].config(bg=green)
+            self.button_states[idx]['button'].config(bg=GREEN)
             self.button_states[idx]['count'] += 1
         else:
             # 超过限制时，恢复按钮为红色，并归零加值
             self.total -= score * limit
-            self.button_states[idx]['button'].config(bg=red)
+            self.button_states[idx]['button'].config(bg=RED)
             self.button_states[idx]['count'] = 0  # 重置点击次数
 
         # 更新按钮上的文本，显示点击次数
@@ -128,7 +124,7 @@ class CalculatorApp:
         self.total = 0
         for idx in self.button_states:
             self.button_states[idx]['active'] = False
-            self.button_states[idx]['button'].config(bg=red, state=tk.NORMAL)
+            self.button_states[idx]['button'].config(bg=RED, state=tk.NORMAL)
             # 重置点击次数
             self.button_states[idx]['count'] = 0
             # 重置按钮文本
@@ -141,7 +137,8 @@ class CalculatorApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.title("时代分计算器")
     
     # 创建应用并传递按钮信息
-    app = CalculatorApp(root, BUTTON_INFO)
+    app = EraPointApp(root, ERA_POINT_INFO)
     root.mainloop()
