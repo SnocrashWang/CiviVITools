@@ -28,29 +28,31 @@ class DiscountApp:
         self.foundation = {option['name']: 0 for option in options}  # 存储 foundation 计数
 
         # 设置最小长宽，保持窗口大小不变
-        for i in range(8):
+        for i in range(10):
             root.grid_columnconfigure(i, minsize=80)
         for i in range(7):
             root.grid_rowconfigure(i, minsize=40)
         root.grid_columnconfigure(0, minsize=120)
-        root.grid_columnconfigure(3, minsize=120)
+        root.grid_columnconfigure(2, minsize=60)
         root.grid_columnconfigure(4, minsize=120)
-        root.grid_columnconfigure(7, minsize=120)
+        root.grid_columnconfigure(5, minsize=120)
+        root.grid_columnconfigure(7, minsize=60)
+        root.grid_columnconfigure(9, minsize=120)
 
         col_1 = ttk.Label(root, text="建成数量", width=10)
         col_1.grid(row=0, column=1, padx=20, pady=10)
         col_2 = ttk.Label(root, text="地基数量", width=10)
-        col_2.grid(row=0, column=2, padx=20, pady=10)
+        col_2.grid(row=0, column=3, padx=20, pady=10)
         col_5 = ttk.Label(root, text="建成数量", width=10)
-        col_5.grid(row=0, column=5, padx=20, pady=10)
+        col_5.grid(row=0, column=6, padx=20, pady=10)
         col_6 = ttk.Label(root, text="地基数量", width=10)
-        col_6.grid(row=0, column=6, padx=20, pady=10)
+        col_6.grid(row=0, column=8, padx=20, pady=10)
 
         # 布局界面
         for idx, option in enumerate(options):
             name = option['name']
             row = idx % int(len(options) / 2) + 1
-            col_offset = idx // int(len(options) / 2) * 4
+            col_offset = idx // int(len(options) / 2) * 5
 
             # 使用 Checkbutton 代替 Button
             name_button = ttk.Checkbutton(root, text=name, bootstyle="success-round-toggle", command=lambda name=name: self.toggle_state(name))
@@ -61,17 +63,22 @@ class DiscountApp:
             spinbox_built.set(0)  # 设置初始值为 0
 
             spinbox_foundation = ttk.Spinbox(root, from_=0, to=100, width=5, command=self.update_all_state)
-            spinbox_foundation.grid(row=row, column=2 + col_offset, padx=10, pady=10)
+            spinbox_foundation.grid(row=row, column=3 + col_offset, padx=10, pady=10)
             spinbox_foundation.set(0)  # 设置初始值为 0
 
+            # 箭头按钮
+            arrow_button = ttk.Button(root, text="◀", bootstyle="outline", width=1, command=lambda name=name: self.transfer_built_foundation(name))
+            arrow_button.grid(row=row, column=2 + col_offset, padx=5, pady=10)
+
             discount_label = ttk.Label(root)
-            discount_label.grid(row=row, column=3 + col_offset, padx=(10, 40), pady=10)
+            discount_label.grid(row=row, column=4 + col_offset, padx=(10, 40), pady=10)
 
             # 存储每个选项对应的控件和状态
             self.state[name] = {
                 'name_button': name_button,
                 'built_spinbox': spinbox_built,
                 'foundation_spinbox': spinbox_foundation,
+                'arrow_button': arrow_button,
                 'label': discount_label
             }
 
@@ -84,12 +91,14 @@ class DiscountApp:
         self.state[name]['built_spinbox'].set(0)  # 隐藏后将计数设置为 0
         self.state[name]['foundation_spinbox'].grid_remove()
         self.state[name]['foundation_spinbox'].set(0)  # 隐藏后将计数设置为 0
+        self.state[name]['arrow_button'].grid_remove()
         self.state[name]['label'].grid_remove()
 
     # 显示 spinbox 和 label
     def show_widgets(self, name):
         self.state[name]['built_spinbox'].grid()
         self.state[name]['foundation_spinbox'].grid()
+        self.state[name]['arrow_button'].grid()
         self.state[name]['label'].grid()
 
     # 切换状态（打开/关闭）
@@ -127,7 +136,14 @@ class DiscountApp:
             else:
                 self.state[name]['label'].config(text="原价", bootstyle="warning")
 
-
+    # 转移地基到建成数量
+    def transfer_built_foundation(self, name):
+        if self.foundation[name] > 0:
+            self.built[name] += 1
+            self.foundation[name] -= 1
+            self.state[name]['built_spinbox'].set(self.built[name])
+            self.state[name]['foundation_spinbox'].set(self.foundation[name])
+        self.update_all_state()
 
 if __name__ == "__main__":
     root = ttk.Window()  # 使用 ttk.Window() 创建窗口
