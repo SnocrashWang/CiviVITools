@@ -1,4 +1,4 @@
-import tkinter as tk
+import ttkbootstrap as ttk
 
 
 ERA_POINT_INFO = [
@@ -48,8 +48,6 @@ ERA_POINT_INFO = [
     {"type": "military", "text": "消灭文明", "score": 5, "limit": 2},
 ]
 
-RED = "#FF3333"
-GREEN = "#99FF33"
 FONT = "Consolas"
 
 
@@ -59,15 +57,15 @@ class EraPointApp:
         self.button_states = {}  # 保存每个按钮的状态
         
         # 创建显示框架
-        display_frame = tk.Frame(root)
+        display_frame = ttk.Frame(root)
         display_frame.pack(pady=20)
         
         # 创建总和显示框
-        self.display = tk.Label(display_frame, text="时代分:  0/31", font=(FONT, 15))
+        self.display = ttk.Label(display_frame, text="时代分:  0/31")
         self.display.pack(side="left", padx=10)
         
         # 添加重置按钮到总和显示旁边
-        reset_button = tk.Button(display_frame, text="重置", font=(FONT, 10), command=self.reset)
+        reset_button = ttk.Button(display_frame, text="重置", command=self.reset)
         reset_button.pack(side="left", padx=10)
         
         # 按钮框架（按类型分行显示按钮）
@@ -82,15 +80,15 @@ class EraPointApp:
             
             # 创建类型对应的按钮框架，如果不存在则创建一个
             if button_type not in self.button_frames:
-                self.button_frames[button_type] = tk.Frame(root)
+                self.button_frames[button_type] = ttk.Frame(root)
                 self.button_frames[button_type].pack(pady=5, anchor="w")  # 使用anchor="w"实现左对齐
             
             # 初始状态为"关"
             self.button_states[idx] = {'button': None, 'score': score, 'limit': limit, 'count': 0}
             
             # 创建按钮，显示text，点击后切换状态
-            button = tk.Button(self.button_frames[button_type], text=f"{text} (0)", font=(FONT, 10), width=20, 
-                               command=lambda i=idx, t=text, l=limit: self.toggle_value(i, t, l), bg=RED)
+            button = ttk.Button(self.button_frames[button_type], text=f"{text} (0)", width=15, 
+                               command=lambda i=idx, t=text, l=limit: self.toggle_value(i, t, l), bootstyle='danger')
             button.pack(side="left", padx=10)
             
             # 保存按钮控件
@@ -104,12 +102,12 @@ class EraPointApp:
         if count < limit:
             # 如果按钮是关闭的，打开并增加值
             self.total += score
-            self.button_states[idx]['button'].config(bg=GREEN)
+            self.button_states[idx]['button'].config(bootstyle='success')
             self.button_states[idx]['count'] += 1
         else:
             # 超过限制时，恢复按钮为红色，并归零加值
             self.total -= score * limit
-            self.button_states[idx]['button'].config(bg=RED)
+            self.button_states[idx]['button'].config(bootstyle='danger')
             self.button_states[idx]['count'] = 0  # 重置点击次数
 
         # 更新按钮上的文本，显示点击次数
@@ -124,7 +122,7 @@ class EraPointApp:
         self.total = 0
         for idx in self.button_states:
             self.button_states[idx]['active'] = False
-            self.button_states[idx]['button'].config(bg=RED, state=tk.NORMAL)
+            self.button_states[idx]['button'].config(bootstyle='danger', state=ttk.NORMAL)
             # 重置点击次数
             self.button_states[idx]['count'] = 0
             # 重置按钮文本
@@ -136,8 +134,11 @@ class EraPointApp:
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = ttk.Window()  # 使用 ttk.Window() 创建窗口
     root.title("时代分计算器")
+
+    # 样式
+    style = ttk.Style("superhero")  # 使用solar主题
     
     # 创建应用并传递按钮信息
     app = EraPointApp(root, ERA_POINT_INFO)
